@@ -11,8 +11,16 @@ struct ContentView: View {
     // MARK: PROPERTY
     @State private var isAnimating: Bool = false
     @State private var imageScale: CGFloat = 1
+    @State private var imageOffSet: CGSize = .zero
     
     // MARK: FUNCTION
+    
+    func resetImageState() {
+        return withAnimation(.spring()) {
+        imageScale = 1
+        imageOffSet = .zero
+        }
+    }
     
     // MARK: CONTENT
     var body: some View {
@@ -26,20 +34,34 @@ struct ContentView: View {
                     .padding()
                     .shadow(color: .black.opacity(0.2), radius: 12, x: 2, y: 2)
                     .opacity(isAnimating ? 1 : 0)
+                    .offset(x: imageOffSet.width, y: imageOffSet.height)
                     .scaleEffect(imageScale)
                 
                 // MARK: 1. - TAP GESTURE
-                    .onTapGesture(count: 2, perform: {
+                    .onTapGesture(count: 2) {
                         if imageScale == 1 {
                              withAnimation(.spring()) {
                                 imageScale = 5
                             }
                         } else {
-                             withAnimation(.spring()) {
-                                imageScale = 1
+                             resetImageState()
                             }
                         }
-                    })
+                    }
+                //MARK: 2. - DRAG GESTURE
+                    .gesture(
+                    DragGesture()
+                        .onChanged { value in
+                            withAnimation(.linear(duration: 1)) {
+                                imageOffSet = value.translation
+                            }
+                        }
+                        .onEnded { _ in
+                            if imageScale <= 1 {
+                               resetImageState()
+                            }
+                        }
+                    )
             }
             .navigationTitle("Pinch & Zoom")
             .navigationBarTitleDisplayMode(.inline)
@@ -48,10 +70,10 @@ struct ContentView: View {
                     isAnimating = true
                 }
             }
+            .navigationViewStyle(.stack)
         }
-        .navigationViewStyle(.stack)
     }
-}
+
 
 // MARK: PREVIEW
 
