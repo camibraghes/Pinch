@@ -23,10 +23,13 @@ struct ContentView: View {
     }
     
     // MARK: CONTENT
+    
     var body: some View {
         NavigationView {
             ZStack {
-    // MARK: PAGE IMAGE
+                Color.clear
+                
+                // MARK: PAGE IMAGE
                 Image("magazine-front-cover")
                     .resizable()
                     .aspectRatio( contentMode: .fit)
@@ -47,7 +50,7 @@ struct ContentView: View {
                              resetImageState()
                             }
                         }
-                    }
+                    
                 //MARK: 2. - DRAG GESTURE
                     .gesture(
                     DragGesture()
@@ -62,13 +65,22 @@ struct ContentView: View {
                             }
                         }
                     )
-            }
+                }
             .navigationTitle("Pinch & Zoom")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 withAnimation(.linear(duration: 1)) {
                     isAnimating = true
+                    }
                 }
+                // MARK: INFO PANEL
+        
+            .overlay(
+                InfoPanleView(scale: imageScale, offset: imageOffSet)
+                    .padding(.horizontal)
+                    .padding(.top, 30)
+                , alignment: .top
+                )
             }
             .navigationViewStyle(.stack)
         }
