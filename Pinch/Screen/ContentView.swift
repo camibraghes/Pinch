@@ -12,6 +12,7 @@ struct ContentView: View {
     @State private var isAnimating: Bool = false
     @State private var imageScale: CGFloat = 1
     @State private var imageOffSet: CGSize = .zero
+    @State private var isDraweropen: Bool = true
     
     // MARK: FUNCTION
     
@@ -90,7 +91,7 @@ struct ContentView: View {
                                 }
                             }
                     )
-            }
+                }
             .navigationTitle("Pinch & Zoom")
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
@@ -154,6 +155,34 @@ struct ContentView: View {
                     .padding(.bottom, 30)
                 , alignment: .bottom
             )
+            // MARK: 4. DRAWER HANDLE
+                .overlay(
+                    HStack(spacing: 12) {
+                        // MARK:  DRAWER HANDLE
+                        Image(systemName: isDraweropen ? "chevron.compact.right" : "chevron.compact.left")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 40)
+                            .padding(8)
+                            .foregroundStyle(.secondary)
+                            .onTapGesture {
+                                withAnimation(.easeOut) {
+                                    isDraweropen.toggle()
+                                }
+                            }
+                        
+                        
+                        Spacer()
+                    }
+                        .padding(EdgeInsets(top: 16, leading: 8, bottom: 16, trailing: 8))
+                        .background(.ultraThinMaterial)
+                        .cornerRadius(15)
+                        .opacity(isAnimating ? 1 : 0)
+                        .frame(width:260)
+                        .padding(.top, UIScreen.main.bounds.height / 12)
+                        .offset(x: isDraweropen ? 20 : 215)
+                    , alignment: .topTrailing
+                )
         }
             .navigationViewStyle(.stack)
     }
