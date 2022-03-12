@@ -10,8 +10,11 @@ import SwiftUI
 
 
 struct InfoPanleView: View {
+    // store the image scale
     var scale: CGFloat
+    // offset values
     var offset: CGSize
+    ///did not add any initial value for these var, because i want to inject the actual scale and offset from the main view.
     
     @State private var isInfoPanelVisible: Bool = false
         

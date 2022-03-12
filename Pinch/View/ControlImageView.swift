@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ControlImageView: View {
+    //the name of the magnifyingglass 
     let icon: String
     
     var body: some View {
